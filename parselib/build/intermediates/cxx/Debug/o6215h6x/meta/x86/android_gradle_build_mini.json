@@ -1,0 +1,27 @@
+{
+  "buildFiles": [
+    "/Users/dipaksisodiya/work/rockstar/frontend/oboe-mp3-player/parselib/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/dipaksisodiya/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+      "-C",
+      "/Users/dipaksisodiya/work/rockstar/frontend/oboe-mp3-player/parselib/.cxx/Debug/o6215h6x/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/dipaksisodiya/Library/Android/sdk/cmake/3.18.1/bin/ninja",
+    "-C",
+    "/Users/dipaksisodiya/work/rockstar/frontend/oboe-mp3-player/parselib/.cxx/Debug/o6215h6x/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "parselib::@6890427a1f51a3e7e1df": {
+      "artifactName": "parselib",
+      "abi": "x86",
+      "output": "/Users/dipaksisodiya/work/rockstar/frontend/oboe-mp3-player/parselib/.cxx/Debug/o6215h6x/x86/libparselib.a",
+      "runtimeFiles": []
+    }
+  }
+}
