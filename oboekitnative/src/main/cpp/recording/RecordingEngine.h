@@ -13,9 +13,9 @@
 #include <fstream>
 #include <thread>
 #include <vector>
-#include "../../../../oboe/include/oboe/AudioStreamCallback.h"
-#include "../../../../oboe/include/oboe/Oboe.h"
-#include "../../../../oboe/include/oboe/Definitions.h"
+#include "oboe/AudioStreamCallback.h"
+#include "oboe/Oboe.h"
+#include "oboe/Definitions.h"
 
 class RecordingEngine{
 public:
@@ -35,7 +35,14 @@ public:
     jlong getFramePosition();
     jlong getFrameTimeStamp();
     jint getAudioSessionId();
+    std::ofstream outputFile;
+
 
 private:
     const char *path;
+    std::ofstream audioFile;
+
+    void handleStreamDisconnection();
+
+    bool attemptStreamRecovery();
 };

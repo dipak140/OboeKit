@@ -29,7 +29,11 @@ include_directories(
         ${IOLIB_DIR}/src/main/cpp)
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
-        oboekitnative.cpp)
+        recording/JNIBridgeRecording.cpp
+        recording/RecordingEngine.cpp
+        earback/JNIBridgeEarback.cpp
+        earback/EarbackEffectEngine.cpp
+)
 
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror "$<$<CONFIG:RELEASE>:-Ofast>")
 
