@@ -15,12 +15,17 @@ import `in`.reconv.oboekit.utils.RecordingUtils
 import java.io.File
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
+import `in`.reconv.oboekitnative.EarbackNativeLib
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RecordingActivity : AppCompatActivity() {
     var nativeRecorder: RecordingNativeLib = RecordingNativeLib()
+    var earbackNativeLib: EarbackNativeLib = EarbackNativeLib()
+
     var isRecordingPaused: Boolean = false
+    var isEarbackEnabled: Boolean = false
+
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var recordedFilePath: String
     private var isRecording = false
@@ -36,7 +41,8 @@ class RecordingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recording)
         requestPermissions()
-
+        earbackNativeLib.createAudioEngine()
+        earbackNativeLib.enable(false)
         supportActionBar?.title = "Oboekit Recording Test"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -73,7 +79,12 @@ class RecordingActivity : AppCompatActivity() {
         }
 
         earbackButton.setOnClickListener {
-
+            if(isEarbackEnabled){
+                earbackNativeLib.enable(false)
+            }else {
+                earbackNativeLib.enable(true)
+            }
+            isEarbackEnabled = !isEarbackEnabled
         }
 
         btnBack.setOnClickListener {
@@ -111,8 +122,9 @@ class RecordingActivity : AppCompatActivity() {
 
     private fun stopRecording() {
         isRecording = false
+        earbackNativeLib.enable(false)
+        earbackNativeLib.destroyAudioEngine()
         nativeRecorder.stopRecording()
-
         RecordingUtils.fixWavHeader(File(recordedFilePath))
     }
 
@@ -152,6 +164,8 @@ class RecordingActivity : AppCompatActivity() {
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer?.stop()
         }
+        earbackNativeLib.enable(false)
+        earbackNativeLib.destroyAudioEngine()
         finish()
     }
 
@@ -162,6 +176,8 @@ class RecordingActivity : AppCompatActivity() {
             mediaPlayer?.stop()
         }
         mediaPlayer?.release()
+        earbackNativeLib.enable(false)
+        earbackNativeLib.destroyAudioEngine()
     }
 
     override fun onSupportNavigateUp(): Boolean {
