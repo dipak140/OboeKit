@@ -16,15 +16,19 @@ import java.io.File
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
 import `in`.reconv.oboekitnative.EarbackNativeLib
+import `in`.reconv.oboekitnative.KaraokePlayerNativeLib
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RecordingActivity : AppCompatActivity() {
     var nativeRecorder: RecordingNativeLib = RecordingNativeLib()
     var earbackNativeLib: EarbackNativeLib = EarbackNativeLib()
+    var karaokePlayer: KaraokePlayerNativeLib = KaraokePlayerNativeLib()
 
-    var isRecordingPaused: Boolean = false
-    var isEarbackEnabled: Boolean = false
+    private var isRecordingPaused: Boolean = false
+    private var isEarbackEnabled: Boolean = false
+    private var isKaraokePlayerInitialized = false
+    private var isKaraokePlaying = false
 
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var recordedFilePath: String
@@ -36,6 +40,9 @@ class RecordingActivity : AppCompatActivity() {
     private lateinit var btnPauseResumeRecording: ImageButton
     private lateinit var earbackButton: ImageButton
     private lateinit var btnBack: ImageButton
+    private lateinit var btnPlayMusic: Button
+    private lateinit var btnPauseMusic: Button
+    private lateinit var btnStopMusic: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +50,14 @@ class RecordingActivity : AppCompatActivity() {
         requestPermissions()
         earbackNativeLib.createAudioEngine()
         earbackNativeLib.enable(false)
+        isKaraokePlayerInitialized = karaokePlayer.createPlayer()
+        if (isKaraokePlayerInitialized) {
+            karaokePlayer.setupAudioStream()
+            val musicFile = File(getExternalFilesDir(android.os.Environment.DIRECTORY_MUSIC), "sample.wav")
+            karaokePlayer.loadWavFile(musicFile.absolutePath, 0, 0.0f)
+        } else {
+            Toast.makeText(this, "Failed to init Karaoke Player", Toast.LENGTH_SHORT).show()
+        }
         supportActionBar?.title = "Oboekit Recording Test"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -59,6 +74,9 @@ class RecordingActivity : AppCompatActivity() {
         btnPauseResumeRecording = findViewById(R.id.btnPauseResumeRecording)
         btnBack = findViewById(R.id.btnBack)
         earbackButton = findViewById(R.id.btnEarback)
+        btnPlayMusic = findViewById(R.id.btnPlay)
+        btnPauseMusic = findViewById(R.id.btnPause)
+        btnStopMusic = findViewById(R.id.btnStop)
     }
 
     private fun setupClickListeners() {
@@ -90,6 +108,36 @@ class RecordingActivity : AppCompatActivity() {
         btnBack.setOnClickListener {
             finish()
         }
+
+        btnPlayMusic.setOnClickListener {
+            if (isKaraokePlayerInitialized) {
+                if (!isKaraokePlaying) {
+                    karaokePlayer.startAudioStream()
+                    karaokePlayer.trigger(0)
+                    isKaraokePlaying = true
+                    Toast.makeText(this, "Playing Karaoke", Toast.LENGTH_SHORT).show()
+                } else {
+                    karaokePlayer.resumeTrigger()
+                }
+            }
+        }
+
+        btnPauseMusic.setOnClickListener {
+            if (isKaraokePlayerInitialized && isKaraokePlaying) {
+                karaokePlayer.pauseTrigger()
+                Toast.makeText(this, "Paused", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnStopMusic.setOnClickListener {
+            if (isKaraokePlayerInitialized && isKaraokePlaying) {
+                karaokePlayer.stopTrigger(0)
+                isKaraokePlaying = false
+                karaokePlayer.seekToPosition(0, 44100, KaraokePlayerNativeLib.NUM_PLAY_CHANNELS)
+                Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     private fun playRecording() {
@@ -178,6 +226,22 @@ class RecordingActivity : AppCompatActivity() {
         mediaPlayer?.release()
         earbackNativeLib.enable(false)
         earbackNativeLib.destroyAudioEngine()
+        if (isKaraokePlayerInitialized) {
+            if (isKaraokePlaying) {
+                karaokePlayer.stopTrigger(0)
+                isKaraokePlaying = false
+            }
+            karaokePlayer.unloadWavAssets()
+            karaokePlayer.teardownAudioStream()
+            karaokePlayer.deletePlayer()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isKaraokePlayerInitialized && isKaraokePlaying) {
+            karaokePlayer.pauseTrigger()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

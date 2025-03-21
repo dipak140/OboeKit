@@ -31,14 +31,21 @@
         android:id="@+id/btnPreviewPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Preview Player"
+        android:text="Karaoke Player"
         android:layout_marginTop="10dp" />
 
     <Button
         android:id="@+id/btnLivePlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Live Player"
+        android:text="Multi Player (with audio effects)"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/btnLiveEarback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Earback for WebRTC Streams"
         android:layout_marginTop="10dp" />
 
 </LinearLayout>

@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnPreviewPlayer).setOnClickListener {
-            startActivity(Intent(this, PreviewPlayerActivity::class.java))
+            startActivity(Intent(this, KaraokePlayerActivity::class.java))
         }
 
         findViewById<Button>(R.id.btnLivePlayer).setOnClickListener {

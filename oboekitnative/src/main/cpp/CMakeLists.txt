@@ -33,6 +33,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         recording/RecordingEngine.cpp
         earback/JNIBridgeEarback.cpp
         earback/EarbackEffectEngine.cpp
+        karaokePlayer/KaraokePlayerEngine.cpp
+        karaokePlayer/JNIBridgeKaraokePlayer.cpp
 )
 
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror "$<$<CONFIG:RELEASE>:-Ofast>")
