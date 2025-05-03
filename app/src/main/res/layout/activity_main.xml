@@ -1,19 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
 
     <TextView
+        android:id="@+id/textjni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30dp"
+        android:text="Oboe Tester"
+        android:layout_marginBottom="100dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btnRecording"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recording" />
+
+    <Button
+        android:id="@+id/btnEarback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Earback"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/btnPreviewPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Karaoke Player"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/btnLivePlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Multi Player (with audio effects)"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/btnLiveEarback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Earback for WebRTC Streams"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>
